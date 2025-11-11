@@ -12,6 +12,7 @@ namespace CuahangNongduoc
 {
     public partial class frmBanSi : Form
     {
+       
         SanPhamController ctrlSanPham = new SanPhamController();
         KhachHangController ctrlKhachHang = new KhachHangController();
         MaSanPhamController ctrlMaSanPham = new MaSanPhamController();
@@ -21,11 +22,10 @@ namespace CuahangNongduoc
         NguoiDungController ctrNguoiDung = new NguoiDungController();
         Dictionary<string, int> viTriLo = new Dictionary<string, int>();
         Dictionary<string, decimal> soLuongLo = new Dictionary<string, decimal>();
-        Decimal bqgq;
 
         IList<MaSanPham> deleted = new List<MaSanPham>();
 
-
+        int tT = 0;
         Controll status = Controll.Normal;
 
         public frmBanSi()
@@ -34,8 +34,6 @@ namespace CuahangNongduoc
 
             status = Controll.AddNew;
         }
-
-
         public frmBanSi(PhieuBanController ctrlPB)
             : this()
         {
@@ -47,6 +45,7 @@ namespace CuahangNongduoc
         {            
 
         }
+        //Có sửa
         private void frmBanSi_Load(object sender, EventArgs e)
         {
             dgvDanhsachSP.AutoGenerateColumns = false;
@@ -79,20 +78,22 @@ namespace CuahangNongduoc
             bindingNavigator.BindingSource.CurrentChanged += new EventHandler(BindingSource_CurrentChanged);
 
             ctrlChiTiet.HienThiChiTiet(dgvDanhsachSP, txtMaPhieu.Text);
-
-
+            toolXoa.Enabled = false;
             if (status == Controll.AddNew)
             {
                 txtMaPhieu.Text = ThamSo.LayMaPhieuBan().ToString();
                 DataTable dt = ctrNguoiDung.LayNguoiDungTheoTDN(ThamSo.Session.TenDangNhap);
                 if (dt.Rows.Count > 0)
                 {
-                    //cmbNV.ValueMember = "ID";
-                    //cmbNV.DisplayMember = "TEN_NGUOI_DUNG";
+                    cmbNV.ValueMember = "ID";
+                    cmbNV.DisplayMember = "TEN_NGUOI_DUNG";
                     cmbNV.DataSource = dt;
                     cmbNV.SelectedValue = int.Parse(dt.Rows[0]["ID"].ToString());
                     cmbNV.Text = dt.Rows[0]["TEN_NGUOI_DUNG"].ToString();
                 }
+
+                    toolXoa.Enabled = true;
+                
             }
             else
             {
@@ -115,12 +116,11 @@ namespace CuahangNongduoc
             }
         }
 
-
+        //Co sua
         void cmbSanPham_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbSanPham.SelectedValue != null)
             {
-                bqgq = BinhQuanGiaQuyen(cmbSanPham.SelectedValue.ToString());
                 string idSP = cmbSanPham.SelectedValue.ToString();
 
                 if (!viTriLo.ContainsKey(idSP))
@@ -130,16 +130,16 @@ namespace CuahangNongduoc
 
                 MaSanPhamController ctrl = new MaSanPhamController();
                 List<MaSanPham> masp = ctrl.LayDanhSachMaSanPham(idSP);
-
+                SanPham sp = ctrlSanPham.LaySanPham(cmbSanPham.SelectedValue.ToString());
                 int index = viTriLo[idSP];
 
                 if (masp.Count > 0 && index < masp.Count)
                 {
-                    numDonGia.Value = masp[index].SanPham.GiaBanSi;
+                    numDonGia.Value = sp.GiaBinhQuan;
                     txtGiaNhap.Text = masp[index].GiaNhap.ToString("#,###0");
                     txtGiaBanSi.Text = masp[index].SanPham.GiaBanSi.ToString("#,###0");
                     txtGiaBanLe.Text = masp[index].SanPham.GiaBanLe.ToString("#,###0");
-                    txtGiaBQGQ.Text = bqgq.ToString("#,###0");
+                    txtGiaBQGQ.Text = sp.GiaBinhQuan.ToString("#,###0");
                 }
 
                 if (viTriLo.ContainsKey(idSP))
@@ -155,8 +155,15 @@ namespace CuahangNongduoc
             
         }
         */
-        private void btnAdd_Click(object sender, EventArgs e)
+        //Có sửa
+         private void btnAdd_Click(object sender, EventArgs e)
         {
+            if(cmbSanPham.SelectedValue == null)
+            {
+                MessageBox.Show("Vui lòng chọn Sản phẩm!", "Phiếu bán", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             if (numSoLuong.Value <= 0)
             {
                 MessageBox.Show("Vui lòng nhập Số lượng!", "Phiếu bán", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -195,7 +202,7 @@ namespace CuahangNongduoc
                     DataRow row = ctrlChiTiet.NewRow();
                     row["ID_MA_SAN_PHAM"] = idLo;
                     row["ID_PHIEU_BAN"] = txtMaPhieu.Text;
-                    row["DON_GIA"] = numDonGia.Value; // Logic Bán sỉ: Lưu giá sỉ
+                    row["DON_GIA"] = Convert.ToDecimal(txtGiaBQGQ.Text); // Logic Bán sỉ: Lưu giá sỉ
                     row["SO_LUONG"] = soLuongXuat;
                     row["THANH_TIEN"] = thanhTien;
                     row["NGAY_HET_HAN"] = loHienTai.NgayHetHan;
@@ -211,25 +218,12 @@ namespace CuahangNongduoc
             }
 
             numSoLuong.Value = 0;
-            numThanhTien.Value = 0;
 
             TinhToanTongTienCuoiCung();
         }
 
-        public decimal BinhQuanGiaQuyen(string idSP)
-        {
-            decimal tongGiaTri = 0;
-            decimal tongSoLuong = 0;
-            List<MaSanPham> danhSachLo = ctrlMaSanPham.LayDanhSachMaSanPham(idSP);
-            foreach (MaSanPham lo in danhSachLo)
-            {
-                tongGiaTri += lo.GiaNhap * lo.SoLuong;
-                tongSoLuong += lo.SoLuong;
-            }
-            if (tongSoLuong == 0) return 0;
-            return tongGiaTri / tongSoLuong;
-        }
-
+       
+        //Thêm
         public void KTraDongTrung()
         {
             DataTable tbl = null;
@@ -279,31 +273,13 @@ namespace CuahangNongduoc
 
         private void toolLuu_Click(object sender, EventArgs e)
         {
-            bindingNavigatorPositionItem.Focus();
-            this.Luu();
+                bindingNavigatorPositionItem.Focus();
+                this.Luu();
 
-                       status = Controll.Normal;
-            this.Allow(false); // Thêm dòng này từ frmBanLe
-             DataTable dt = ctrlMaSanPham.DanhSachMSP();
-             Dictionary<string, long> tongTheoMaSP = new Dictionary<string, long>();
 
-            foreach (DataRow row in dt.Rows)
-            {
-                string maSP = row["ID_SAN_PHAM"].ToString();
-                long soLuong = Convert.ToInt64(row["SO_LUONG"]);
+                           status = Controll.Normal;
+                this.Allow(false); // Thêm dòng này từ frmBanLe
 
-                if (tongTheoMaSP.ContainsKey(maSP))
-                    tongTheoMaSP[maSP] += soLuong;
-                else
-                    tongTheoMaSP[maSP] = soLuong;
-            }
-            // Sau khi cộng dồn xong, với mỗi sản phẩm trùng, cộng lại vào tồn kho
-            foreach (var item in tongTheoMaSP)
-            {
-                // Giả sử UpdateSoLuong(maSP, soLuong) là hàm "cập nhật tồn kho"
-                // bạn nên tạo riêng một hàm kiểu: Cộng lại tồn kho
-                ctrlSanPham.UpdateSoLuong(item.Key, item.Value);
-            }
         }
         void Luu()
         {
@@ -344,68 +320,84 @@ namespace CuahangNongduoc
 
             ctrlPhieuBan.CapNhatPhieuBan(currentRow.Row);
         }
-
+        //Co sửa
         void ThemMoi()
-        {
-            // Tạo DataTable tạm để chứa dòng mới
-            DataTable tbl = new DataTable();
-            tbl.Columns.Add("ID");
-            tbl.Columns.Add("ID_NGUOI_DUNG", typeof(int));
-            tbl.Columns.Add("ID_KHACH_HANG");
-            tbl.Columns.Add("NGAY_BAN", typeof(DateTime));
-            tbl.Columns.Add("TONG_TIEN", typeof(long));
-            tbl.Columns.Add("DA_TRA", typeof(long));
-            tbl.Columns.Add("CON_NO", typeof(long));
-            tbl.Columns.Add("GIAM_GIA", typeof(long));
-            tbl.Columns.Add("PHI_DICH_VU", typeof(long));
-            tbl.Columns.Add("PHI_VAN_CHUYEN", typeof(long));
-            tbl.Columns.Add("ID_DICH_VU", typeof(int));
+        { 
+                // Tạo DataTable tạm để chứa dòng mới
+                DataTable tbl = new DataTable();
+                tbl.Columns.Add("ID");
+                tbl.Columns.Add("ID_NGUOI_DUNG", typeof(int));
+                tbl.Columns.Add("ID_KHACH_HANG");
+                tbl.Columns.Add("NGAY_BAN", typeof(DateTime));
+                tbl.Columns.Add("TONG_TIEN", typeof(long));
+                tbl.Columns.Add("DA_TRA", typeof(long));
+                tbl.Columns.Add("CON_NO", typeof(long));
+                tbl.Columns.Add("GIAM_GIA", typeof(long));
+                tbl.Columns.Add("PHI_DICH_VU", typeof(long));
+                tbl.Columns.Add("PHI_VAN_CHUYEN", typeof(long));
+                tbl.Columns.Add("ID_DICH_VU", typeof(int));
 
-            DataRow row = tbl.NewRow();
+                DataRow row = tbl.NewRow();
 
-            // Lấy các giá trị từ form
-            row["ID"] = txtMaPhieu.Text;
-            row["ID_KHACH_HANG"] = cmbKhachHang.SelectedValue;
-            row["NGAY_BAN"] = dtNgayLapPhieu.Value.Date;
-            row["TONG_TIEN"] = numTongTien.Value;
-            row["DA_TRA"] = numDaTra.Value;
-            row["CON_NO"] = numConNo.Value;
-            row["PHI_DICH_VU"] = numPhiDichVu.Value;
-            row["GIAM_GIA"] = numGiamGia.Value;
-            row["PHI_VAN_CHUYEN"] = numPhiVanChuyen.Value;
-            row["ID_DICH_VU"] = cmbDichVu.SelectedValue;
-            row["ID_NGUOI_DUNG"] = cmbNV.SelectedValue; // Tạm gán cứng ID 1
-
-
-            PhieuBanController ctrl = new PhieuBanController();
-
-            // if (ctrl.LayPhieuBan(txtMaPhieu.Text) != null) // Hàm cũ
-            if (ctrl.LayPhieuBan(DateTime.MinValue, txtMaPhieu.Text) != null) // Hàm mới
-            {
-                MessageBox.Show("Mã Phiếu bán này đã tồn tại!", "Phiếu bán", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+                // Lấy các giá trị từ form
+                row["ID"] = txtMaPhieu.Text;
+                row["ID_KHACH_HANG"] = cmbKhachHang.SelectedValue;
+                row["NGAY_BAN"] = dtNgayLapPhieu.Value.Date;
+                row["TONG_TIEN"] = numTongTien.Value;
+                row["DA_TRA"] = numDaTra.Value;
+                row["CON_NO"] = numConNo.Value;
+                row["PHI_DICH_VU"] = numPhiDichVu.Value;
+                row["GIAM_GIA"] = numGiamGia.Value;
+                row["PHI_VAN_CHUYEN"] = numPhiVanChuyen.Value;
+                row["ID_DICH_VU"] = cmbDichVu.SelectedValue;
+                row["ID_NGUOI_DUNG"] = cmbNV.SelectedValue; // Tạm gán cứng ID 1
 
 
+                PhieuBanController ctrl = new PhieuBanController();
 
-            if (ctrlPhieuBan.LuuPhieuBanMoi(row))
-            {
-                MessageBox.Show("Lưu phiếu bán thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                ctrlChiTiet.Save();
-                if (ThamSo.LaSoNguyen(txtMaPhieu.Text))
+                // if (ctrl.LayPhieuBan(txtMaPhieu.Text) != null) // Hàm cũ
+                if (ctrl.LayPhieuBan(DateTime.MinValue, txtMaPhieu.Text) != null) // Hàm mới
                 {
-                    long so = Convert.ToInt64(txtMaPhieu.Text);
-                    if (so >= ThamSo.LayMaPhieuBan())
+                    MessageBox.Show("Mã Phiếu bán này đã tồn tại!", "Phiếu bán", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+
+                DataTable dtSP = ctrlMaSanPham.DanhSachMSP();
+                Dictionary<string, long> tongTheoMaSP = new Dictionary<string, long>();
+
+                foreach (DataRow rowSP in dtSP.Rows)
+                {
+                    string maSP = rowSP["ID_SAN_PHAM"].ToString();
+                    long soLuong = Convert.ToInt64(rowSP["SO_LUONG"]);
+
+                    if (tongTheoMaSP.ContainsKey(maSP))
+                        tongTheoMaSP[maSP] += soLuong;
+                    else
+                        tongTheoMaSP[maSP] = soLuong;
+                }
+                // Sau khi cộng dồn xong, với mỗi sản phẩm trùng, cộng lại vào tồn kho
+                foreach (var item in tongTheoMaSP)
+                {
+                    // Giả sử UpdateSoLuong(maSP, soLuong) là hàm "cập nhật tồn kho"
+                    // bạn nên tạo riêng một hàm kiểu: Cộng lại tồn kho
+                    ctrlSanPham.UpdateSoLuong(item.Key, item.Value);
+                }
+                if (ctrlPhieuBan.LuuPhieuBanMoi(row))
+                {
+                    MessageBox.Show("Lưu phiếu bán thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ctrlChiTiet.Save();
+                    if (ThamSo.LaSoNguyen(txtMaPhieu.Text))
                     {
-                        ThamSo.GanMaPhieuBan(so + 1);
+                        long so = Convert.ToInt64(txtMaPhieu.Text);
+                        if (so >= ThamSo.LayMaPhieuBan())
+                        {
+                            ThamSo.GanMaPhieuBan(so + 1);
+                        }
                     }
                 }
-            }
-            else
-            {
-                MessageBox.Show("Lưu phiếu bán thất bại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+
+
         }
 
         private void toolLuu_Them_Click(object sender, EventArgs e)
@@ -630,7 +622,24 @@ namespace CuahangNongduoc
         {
             TinhToanTongTienCuoiCung();
         }
+        //Thêm
+        frmKhachHang frmKhachHang = null;
 
-        
+        private void btnThemDaiLy_Click_1(object sender, EventArgs e)
+        {
+            if (frmKhachHang == null || frmKhachHang.IsDisposed)
+            {
+                frmKhachHang = new frmKhachHang();
+                frmKhachHang.FormClosed += (s, args) =>
+                {
+                    ctrlKhachHang.HienthiAutoComboBox(cmbKhachHang, true);
+                };
+                frmKhachHang.Show();
+            }
+            else
+            {
+                frmKhachHang.Activate();
+            }
+        }
     }
 }

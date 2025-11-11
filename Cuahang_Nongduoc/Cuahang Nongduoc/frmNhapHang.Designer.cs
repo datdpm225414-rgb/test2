@@ -46,7 +46,6 @@
             this.toolXoa = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolSavePrint = new System.Windows.Forms.ToolStripButton();
-            this.toolXemLai = new System.Windows.Forms.ToolStripButton();
             this.toolThoat = new System.Windows.Forms.ToolStripButton();
             this.btnAdd = new System.Windows.Forms.Button();
             this.dataGridView = new System.Windows.Forms.DataGridView();
@@ -94,6 +93,7 @@
             this.numTongTien = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
             this.txtMaPhieu = new System.Windows.Forms.TextBox();
+            this.toolXemLai = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator)).BeginInit();
             this.bindingNavigator.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
@@ -128,10 +128,10 @@
             this.toolLuuThem,
             this.toolChinhsua,
             this.toolLuuThoat,
+            this.toolXemLai,
             this.toolXoa,
             this.toolStripSeparator1,
             this.toolSavePrint,
-            this.toolXemLai,
             this.toolThoat});
             this.bindingNavigator.Location = new System.Drawing.Point(0, 0);
             this.bindingNavigator.MoveFirstItem = this.bindingNavigatorMoveFirstItem;
@@ -271,17 +271,6 @@
             this.toolSavePrint.Text = "Trang in";
             this.toolSavePrint.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolSavePrint.Click += new System.EventHandler(this.toolSavePrint_Click);
-            // 
-            // toolXemLai
-            // 
-            this.toolXemLai.Image = global::CuahangNongduoc.Properties.Resources.reload_24;
-            this.toolXemLai.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolXemLai.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolXemLai.Name = "toolXemLai";
-            this.toolXemLai.Size = new System.Drawing.Size(50, 43);
-            this.toolXemLai.Text = "Xem lại";
-            this.toolXemLai.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.toolXemLai.Click += new System.EventHandler(this.frmNhapHang_Load);
             // 
             // toolThoat
             // 
@@ -780,6 +769,17 @@
             this.txtMaPhieu.Size = new System.Drawing.Size(155, 20);
             this.txtMaPhieu.TabIndex = 22;
             // 
+            // toolXemLai
+            // 
+            this.toolXemLai.Image = global::CuahangNongduoc.Properties.Resources.reload_24;
+            this.toolXemLai.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolXemLai.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolXemLai.Name = "toolXemLai";
+            this.toolXemLai.Size = new System.Drawing.Size(50, 43);
+            this.toolXemLai.Text = "Xem lại";
+            this.toolXemLai.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolXemLai.Click += new System.EventHandler(this.toolXemLai_Click);
+            // 
             // frmNhapHang
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -867,7 +867,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colNgayNhap;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNgaySanXuat;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNgayHetHan;
-        private System.Windows.Forms.ToolStripButton toolXemLai;
         private System.Windows.Forms.ToolStripButton toolSavePrint;
         private System.Windows.Forms.ToolStripButton toolChinhsua;
         private System.Windows.Forms.ToolStripButton toolXoa;
@@ -881,5 +880,6 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.ComboBox cmbNV;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.ToolStripButton toolXemLai;
     }
 }

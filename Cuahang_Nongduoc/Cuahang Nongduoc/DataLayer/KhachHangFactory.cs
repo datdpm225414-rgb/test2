@@ -13,50 +13,55 @@ namespace CuahangNongduoc.DataLayer
 
         public DataTable DanhsachKhachHang(bool loai)
         {
-            // Đã bỏ 'Trang_Thai'
-            SqlCommand cmd = new SqlCommand("SELECT ID, HO_TEN, DIA_CHI, DIEN_THOAI, LOAI_KH FROM KHACH_HANG KH " +
-                                          "WHERE LOAI_KH = @loai " +
-                                          "ORDER BY CAST(ID AS BIGINT) ASC");
+            //OleDbCommand cmd = new OleDbCommand("SELECT * FROM KHACH_HANG WHERE LOAI_KH = " + loai);
+            SqlCommand cmd = new SqlCommand("SELECT ID, HO_TEN, DIA_CHI, DIEN_THOAI, LOAI_KH FROM KHACH_HANG KH WHERE LOAI_KH = @loai AND Trang_Thai = 1 ");
             cmd.Parameters.Add("loai", SqlDbType.Bit).Value = loai;
             m_Ds.Load(cmd);
+
             return m_Ds;
         }
         public DataTable TimHoTen(String hoten, bool loai)
         {
-            // Đã bỏ 'Trang_Thai'
-            SqlCommand cmd = new SqlCommand("SELECT ID, HO_TEN, DIA_CHI, DIEN_THOAI, LOAI_KH FROM KHACH_HANG KH " +
-                                          "WHERE HO_TEN LIKE N'%' + @hoten + '%' AND KH.LOAI_KH = @loai");
+            //OleDbCommand cmd = new OleDbCommand("SELECT * FROM KHACH_HANG WHERE HO_TEN LIKE '%' + @hoten + '%' AND LOAI_KH = " + loai);
+            //cmd.Parameters.Add("hoten", OleDbType.VarChar).Value = hoten;
+
+            // ---- ĐÃ SỬA ---- (Bỏ chữ SELECT thừa)
+            SqlCommand cmd = new SqlCommand("SELECT ID, HO_TEN, DIA_CHI, DIEN_THOAI, LOAI_KH FROM KHACH_HANG KH WHERE HO_TEN LIKE N'%' + @hoten + '%' AND LOAI_KH = @loai");
             cmd.Parameters.Add("hoten", SqlDbType.VarChar).Value = hoten;
             cmd.Parameters.Add("loai", SqlDbType.Bit).Value = loai;
             m_Ds.Load(cmd);
+
             return m_Ds;
         }
 
         public DataTable TimDiaChi(String diachi, bool loai)
         {
-            // Đã bỏ 'Trang_Thai'
-            SqlCommand cmd = new SqlCommand("SELECT ID, HO_TEN, DIA_CHI, DIEN_THOAI, LOAI_KH FROM KHACH_HANG " +
-                                          "WHERE DIA_CHI LIKE N'%' + @diachi + '%' AND LOAI_KH = @loai");
+            //OleDbCommand cmd = new OleDbCommand("SELECT * FROM KHACH_HANG WHERE DIA_CHI LIKE '%' + @diachi + '%' AND LOAI_KH = " + loai);
+            //cmd.Parameters.Add("diachi", OleDbType.VarChar).Value = diachi;
+
+            // ---- ĐÃ SỬA ---- (Bỏ chữ SELECT thừa)
+            SqlCommand cmd = new SqlCommand("SELECT ID, HO_TEN, DIA_CHI, DIEN_THOAI, LOAI_KH FROM KHACH_HANG WHERE DIA_CHI LIKE N'%' + @diachi + '%' AND LOAI_KH = @loai");
             cmd.Parameters.Add("diachi", SqlDbType.VarChar).Value = diachi;
             cmd.Parameters.Add("loai", SqlDbType.Bit).Value = loai;
             m_Ds.Load(cmd);
+
             return m_Ds;
         }
 
         public DataTable DanhsachKhachHang()
         {
-            // Đã bỏ 'Trang_Thai'
-            SqlCommand cmd = new SqlCommand("SELECT ID, HO_TEN, DIA_CHI, DIEN_THOAI, LOAI_KH FROM KHACH_HANG " +
-                                          "ORDER BY CAST(ID AS BIGINT) ASC");
+            //OleDbCommand cmd = new OleDbCommand("SELECT * FROM KHACH_HANG");
+            SqlCommand cmd = new SqlCommand("SELECT * FROM KHACH_HANG");
             m_Ds.Load(cmd);
+
             return m_Ds;
         }
 
         public DataTable LayKhachHang(String id)
         {
-            // Đã bỏ 'Trang_Thai'
-            SqlCommand cmd = new SqlCommand("SELECT ID, HO_TEN, DIA_CHI, DIEN_THOAI, LOAI_KH FROM KHACH_HANG " +
-                                          "WHERE ID = @id");
+            //OleDbCommand cmd = new OleDbCommand("SELECT * FROM KHACH_HANG WHERE ID = @id");
+            //cmd.Parameters.Add("id", OleDbType.VarChar,50).Value = id;
+            SqlCommand cmd = new SqlCommand("SELECT ID, HO_TEN, DIA_CHI, DIEN_THOAI, LOAI_KH FROM KHACH_HANG WHERE ID = @id");
             cmd.Parameters.Add("id", SqlDbType.VarChar, 50).Value = id;
             m_Ds.Load(cmd);
             return m_Ds;
@@ -73,20 +78,6 @@ namespace CuahangNongduoc.DataLayer
         public bool Save()
         {
             return m_Ds.ExecuteNoneQuery() > 0;
-        }
-
-        public long GetMaxKhachHangID()
-        {
-            long maxID = 0;
-            DataService tempDs = new DataService();
-            SqlCommand cmd = new SqlCommand("SELECT MAX(CAST(ID AS BIGINT)) FROM KHACH_HANG");
-            tempDs.Load(cmd);
-
-            if (tempDs.Rows.Count > 0 && tempDs.Rows[0][0] != DBNull.Value)
-            {
-                maxID = Convert.ToInt64(tempDs.Rows[0][0]);
-            }
-            return maxID;
         }
     }
 }

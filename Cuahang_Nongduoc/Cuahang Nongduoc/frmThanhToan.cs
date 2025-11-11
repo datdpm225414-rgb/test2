@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using CuahangNongduoc.Controller;
+using CuahangNongduoc.Strategy;
 
 namespace CuahangNongduoc
 {
@@ -14,10 +15,12 @@ namespace CuahangNongduoc
         KhachHangController ctrlKH = new KhachHangController();
         NguoiDungController ctrlND = new NguoiDungController();
         PhieuThanhToanController ctrl = new PhieuThanhToanController();
+        KhachHangController ctrlKhachHang = new KhachHangController();
         public frmThanhToan()
         {
             InitializeComponent();
         }
+        //Co sua
 
         private void frmThanhToan_Load(object sender, EventArgs e)
         {
@@ -34,6 +37,7 @@ namespace CuahangNongduoc
         {
             
         }
+        //Co sua
 
         private void toolAdd_Click(object sender, EventArgs e)
         {
@@ -57,7 +61,7 @@ namespace CuahangNongduoc
                 e.Cancel = true;
             }
         }
-
+        //Co sua
         private void toolDelete_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Bạn chắc chắn xóa phiếu thanh toán này không?", "Phieu Thanh Toan", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -67,10 +71,11 @@ namespace CuahangNongduoc
                     try
                     {
 
+                        var policy = new XoaMem();
 
                         DataGridViewRow row = dataGridView.SelectedRows[0];
                         string id = row.Cells["colMaPhieu"].Value.ToString();
-                        ThamSo.Delete(id, "PHIEU_THANH_TOAN");
+                        ThamSo.Delete(id, "PHIEU_THANH_TOAN",policy);
 
                         MessageBox.Show("Xóa thành công!", "Phieu thanh toan", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         frmThanhToan_Load(sender, e);
@@ -87,6 +92,7 @@ namespace CuahangNongduoc
                 //ctrl.Save();
             }
         }
+        //Co sua
 
         private void toolSave_Click(object sender, EventArgs e)
         {
@@ -151,6 +157,22 @@ namespace CuahangNongduoc
                     Tim.cmbKhachHang.SelectedValue.ToString(), Tim.dtNgayThu.Value.Date);
             }
         }
-
+       frmKhachHang frmKhachHang = null;
+        private void btnThemKH_Click(object sender, EventArgs e)
+        {
+            if (frmKhachHang == null || frmKhachHang.IsDisposed)
+            {
+                frmKhachHang = new frmKhachHang();
+                frmKhachHang.FormClosed += (s, args) =>
+                {
+                    ctrlKhachHang.HienthiAutoComboBox(cmbKhachHang, true);
+                };
+                frmKhachHang.Show();
+            }
+            else
+            {
+                frmKhachHang.Activate();
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Data;
 using CuahangNongduoc.BusinessObject;
 using CuahangNongduoc.DataLayer;
 
+
 namespace CuahangNongduoc.Controller
 {
     public class KhachHangController
@@ -13,6 +14,8 @@ namespace CuahangNongduoc.Controller
 
         public void HienthiAutoComboBox(System.Windows.Forms.ComboBox cmb, bool loai)
         {
+            // ---- ĐÃ SỬA ----
+            // Truyền biến 'loai' (true/false) thay vì hard-code 'false'
             cmb.DataSource = factory.DanhsachKhachHang(loai);
             cmb.DisplayMember = "HO_TEN";
             cmb.ValueMember = "ID";
@@ -27,52 +30,56 @@ namespace CuahangNongduoc.Controller
         public void HienthiKhachHangDataGridview(System.Windows.Forms.DataGridView dg, System.Windows.Forms.BindingNavigator bn)
         {
             System.Windows.Forms.BindingSource bs = new System.Windows.Forms.BindingSource();
-            DataTable tbl = factory.DanhsachKhachHang(false); // Đây là form Khách lẻ (LOAI_KH = false)
-
-            // Sửa lỗi: Gán default cho LOAI_KH, không phải Trang_Thai
-            tbl.Columns["LOAI_KH"].DefaultValue = false;
-
+            // Hàm này dành riêng cho khách lẻ (LOAI_KH = 0)
+            DataTable tbl = factory.DanhsachKhachHang(false);
+            tbl.Columns[4].DefaultValue = false;
             bs.DataSource = tbl;
             bn.BindingSource = bs;
             dg.DataSource = bs;
+
         }
 
         public void HienthiKhachHangChungDataGridviewComboBox(System.Windows.Forms.DataGridViewComboBoxColumn cmb)
         {
+
             cmb.DataSource = factory.DanhsachKhachHang();
             cmb.DisplayMember = "HO_TEN";
             cmb.ValueMember = "ID";
             cmb.DataPropertyName = "ID_KHACH_HANG";
             cmb.HeaderText = "Khách hàng";
+
         }
 
         public void HienthiKhachHangDataGridviewComboBox(System.Windows.Forms.DataGridViewComboBoxColumn cmb)
         {
+            // Hàm này dành riêng cho khách lẻ (LOAI_KH = 0)
             cmb.DataSource = factory.DanhsachKhachHang(false);
             cmb.DisplayMember = "HO_TEN";
             cmb.ValueMember = "ID";
             cmb.DataPropertyName = "ID_KHACH_HANG";
             cmb.HeaderText = "Khách hàng";
+
         }
         public void HienthiDaiLyDataGridviewComboBox(System.Windows.Forms.DataGridViewComboBoxColumn cmb)
         {
+            // Hàm này dành riêng cho đại lý (LOAI_KH = 1)
             cmb.DataSource = factory.DanhsachKhachHang(true);
             cmb.DisplayMember = "HO_TEN";
             cmb.ValueMember = "ID";
             cmb.DataPropertyName = "ID_KHACH_HANG";
             cmb.HeaderText = "Đại lý";
+
         }
         public void HienthiDaiLyDataGridview(System.Windows.Forms.DataGridView dg, System.Windows.Forms.BindingNavigator bn)
         {
             System.Windows.Forms.BindingSource bs = new System.Windows.Forms.BindingSource();
-            DataTable tbl = factory.DanhsachKhachHang(true); // Đây là form Đại lý (LOAI_KH = true)
-
-            // Sửa lỗi: Gán default cho LOAI_KH
-            tbl.Columns["LOAI_KH"].DefaultValue = true;
-
+            // Hàm này dành riêng cho đại lý (LOAI_KH = 1)
+            DataTable tbl = factory.DanhsachKhachHang(true);
+            tbl.Columns[4].DefaultValue = true;
             bs.DataSource = tbl;
             bn.BindingSource = bs;
             dg.DataSource = bs;
+
         }
 
         public void TimHoTen(String hoten, bool loai)
@@ -127,11 +134,6 @@ namespace CuahangNongduoc.Controller
         public bool Save()
         {
             return factory.Save();
-        }
-
-        public long GetMaxKhachHangID()
-        {
-            return factory.GetMaxKhachHangID();
         }
     }
 }

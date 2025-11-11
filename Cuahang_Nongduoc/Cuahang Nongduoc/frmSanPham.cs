@@ -5,7 +5,9 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using CuahangNongduoc.BusinessObject;
 using CuahangNongduoc.Controller;
+using CuahangNongduoc.Strategy;
 
 namespace CuahangNongduoc
 {
@@ -18,41 +20,88 @@ namespace CuahangNongduoc
         {
             InitializeComponent();
         }
-
+        //Có sửa
         private void frmSanPham_Load(object sender, EventArgs e)
         {
+            
             dataGridView.AutoGenerateColumns = false;
             ctrlDVT.HienthiAutoComboBox(cmbDVT);
             dataGridView.Columns.Add(ctrlDVT.HienthiDataGridViewComboBoxColumn());
             ctrl.HienthiDataGridview(dataGridView, bindingNavigator,
                  txtMaSanPham, txtTenSanPham, cmbDVT, numDonGiaNhap, numGiaBanSi, numGiaBanLe);
+            bindingNavigator.BindingSource.MoveFirst();
+
+            Allow(true);
         }
 
+        //Thêm mới
+        void Allow(bool allow)
+        {
+            dataGridView.Enabled = allow;
+            txtTenSanPham.Enabled = !allow;
+            cmbDVT.Enabled = !allow;
+            numDonGiaNhap.Enabled = !allow;
+            numGiaBanSi.Enabled = !allow;
+            numGiaBanLe.Enabled = !allow;
+            bindingNavigatorDeleteItem.Enabled = allow;
+            toolLuu.Enabled = !allow;
 
+        }
+        //Có sửa
         private void toolLuu_Click(object sender, EventArgs e)
         {
-            txtMaSanPham.BringToFront();
-            DataRow row = ctrl.NewRow();
-            long maso = ThamSo.SanPham;
-            ThamSo.SanPham = maso + 1;
-            row["ID"] = maso;
-            row["TEN_SAN_PHAM"] = txtTenSanPham.Text.Trim();
-            row["SO_LUONG"] = 0;
-            row["DON_GIA_NHAP"] = numDonGiaNhap.Value;
-            row["GIA_BAN_SI"] = numGiaBanSi.Value;
-            row["GIA_BAN_LE"] = numGiaBanLe.Value;
-            row["ID_DON_VI_TINH"] = cmbDVT.SelectedValue;
-            row["GIA_BINH_QUAN"] = 0;
-            ctrl.Add(row);
-            bindingNavigator.BindingSource.MoveLast();
-            bindingNavigatorPositionItem.Focus();
-            ctrl.Save();
-        }
+            if(numDonGiaNhap.Value<=0)
+            {
+                MessageBox.Show("Đơn giá nhập phải lớn hơn 0!", "Sản phẩm", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                numDonGiaNhap.Focus();
+                return;
+            }
+            else if(txtTenSanPham.Text.Trim() == "")
+            {
+                MessageBox.Show("Tên sản phẩm không được để trống!", "Sản phẩm", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtTenSanPham.Focus();
+                return;
+            }
+            else if (numGiaBanSi.Value <= 0)
+            {
+                MessageBox.Show("Giá bán sỉ phải lớn hơn 0!", "Sản phẩm", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                numGiaBanSi.Focus();
+                return;
+            }
+            else if (numGiaBanLe.Value <= 0)
+            {
+                MessageBox.Show("Giá bán lẻ phải lớn hơn 0!", "Sản phẩm", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                numGiaBanLe.Focus();
+                return;
+            }
+            else
+            {
+                txtMaSanPham.BringToFront();
+                DataRow row = ctrl.NewRow();
+                long maso = ThamSo.SanPham;
+                ThamSo.SanPham = maso + 1;
+                row["ID"] = maso;
+                row["TEN_SAN_PHAM"] = txtTenSanPham.Text.Trim();
+                row["SO_LUONG"] = 0;
+                row["DON_GIA_NHAP"] = numDonGiaNhap.Value;
+                row["GIA_BAN_SI"] = numGiaBanSi.Value;
+                row["GIA_BAN_LE"] = numGiaBanLe.Value;
+                row["ID_DON_VI_TINH"] = cmbDVT.SelectedValue;
+                row["GIA_BINH_QUAN"] = 0;
+                ctrl.Add(row);
+                bindingNavigator.BindingSource.MoveLast();
+                bindingNavigatorPositionItem.Focus();
+                ctrl.Save();
+            }
 
+        }
+        //Có sửa
         private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
+            Allow(false);   
             txtMaGia.BringToFront();
             txtMaGia.Text = ThamSo.SanPham.ToString();
+            txtTenSanPham.Text = "";
             numDonGiaNhap.Value = 0;
             numGiaBanSi.Value = 0;
             numGiaBanLe.Value = 0;
@@ -60,11 +109,46 @@ namespace CuahangNongduoc
         }
 
 
+        //Có sửa
         private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
         {
+
+
             if (MessageBox.Show("Bạn có chắc chắn xóa không?", "San Pham", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                bindingNavigator.BindingSource.RemoveCurrent();
+                if (dataGridView.SelectedRows.Count > 0)
+                {
+
+
+                    int sp = Convert.ToInt32(dataGridView.SelectedRows[0].Cells["colSoLuong"].Value.ToString());
+                    if (sp > 0)
+                    {
+                        MessageBox.Show("Sản phẩm còn trong kho, không thể xóa!", "San pham", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    }
+                    else
+                    {
+                        try
+                        {
+
+                            var policy = new XoaMem();
+
+                            string id = txtMaSanPham.Text;
+                            if (ThamSo.Delete(id, "SAN_PHAM", policy))
+                            {
+                                MessageBox.Show("Xóa thành công!", "San pham", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Lỗi xóa sản phẩm! " + ex.Message, "San pham", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
+                        //                    }
+                    }
+                    frmSanPham_Load(sender, e);
+                    //bindingNavigator.BindingSource.RemoveCurrent();
+                }
             }
         }
 
@@ -133,6 +217,10 @@ namespace CuahangNongduoc
             toolTimSanPham.ForeColor = Color.Black;
         }
 
-  
+        //Them
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            frmSanPham_Load(sender, e);
+        }
     }
 }

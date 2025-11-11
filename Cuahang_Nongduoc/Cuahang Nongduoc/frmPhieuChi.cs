@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using CuahangNongduoc.Controller;
+using CuahangNongduoc.Strategy;
 
 namespace CuahangNongduoc
 {
@@ -18,6 +19,7 @@ namespace CuahangNongduoc
         {
             InitializeComponent();
         }
+        //Co sua
 
         private void frmThanhToan_Load(object sender, EventArgs e)
         {
@@ -29,6 +31,7 @@ namespace CuahangNongduoc
             ctrl.HienthiPhieuChi(bindingNavigator, dataGridView,cmbNV, cmbLyDoChi, txtMaPhieu, dtNgayChi, numTongTien, txtGhiChu);
         }
 
+        //Co sua
         private void toolAdd_Click(object sender, EventArgs e)
         {   
             MessageBox.Show("Hãy nhập dữ liệu rồi ấn lưu","Thông báo",MessageBoxButtons.OK,MessageBoxIcon.Information);
@@ -51,7 +54,7 @@ namespace CuahangNongduoc
                 e.Cancel = true;
             }
         }
-
+        //Co sua
         private void toolDelete_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Bạn chắc chắn xóa phiếu chi này không?", "Phieu Chi", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -62,10 +65,11 @@ namespace CuahangNongduoc
                     try
                     {
 
-                    
-                    DataGridViewRow row = dataGridView.SelectedRows[0];
+                        var policy = new XoaMem();
+
+                        DataGridViewRow row = dataGridView.SelectedRows[0];
                     string id = row.Cells["colMaPhieu"].Value.ToString();
-                    ThamSo.Delete(id, "PHIEU_CHI");
+                    ThamSo.Delete(id, "PHIEU_CHI",policy);
                     
                         MessageBox.Show("Xóa thành công!", "Phieu chi ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         frmThanhToan_Load(sender, e);
@@ -82,7 +86,7 @@ namespace CuahangNongduoc
                 //ctrl.Save();
             }
         }
-
+        //Co sua
         private void toolSave_Click(object sender, EventArgs e)
         {
             ThamSo.PhieuChi = Convert.ToInt64(txtMaPhieu.Text);
@@ -92,7 +96,7 @@ namespace CuahangNongduoc
             row["TONG_TIEN"] = numTongTien.Value;
             row["GHI_CHU"] = txtGhiChu.Text;
             row["ID_LY_DO_CHI"] = cmbLyDoChi.SelectedValue;
-            row["ID_NGUOI_DUNG"] = cmbNV.SelectedValue;
+            row["ID_NGUOI_DUNG"] = cmbNV.SelectedValue; 
             ctrl.Add(row);
             bindingNavigator.BindingSource.MoveLast();
             txtMaPhieu.Focus();

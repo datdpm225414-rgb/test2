@@ -48,12 +48,13 @@
             this.bindingNavigatorAddNewItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorDeleteItem = new System.Windows.Forms.ToolStripButton();
             this.toolLuu = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolThoat = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolTimKiem = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolTimHoTen = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTimDiaChi = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTimNhaCungCap = new System.Windows.Forms.ToolStripTextBox();
+            this.toolReload = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator)).BeginInit();
             this.bindingNavigator.SuspendLayout();
@@ -62,6 +63,7 @@
             // dataGridView
             // 
             this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -72,6 +74,7 @@
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 46);
             this.dataGridView.Name = "dataGridView";
+            this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView.Size = new System.Drawing.Size(647, 364);
             this.dataGridView.TabIndex = 3;
             this.dataGridView.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridView_UserDeletingRow);
@@ -87,14 +90,12 @@
             this.colHoTen.DataPropertyName = "HO_TEN";
             this.colHoTen.HeaderText = "Nhà cung cấp";
             this.colHoTen.Name = "colHoTen";
-            this.colHoTen.Width = 200;
             // 
             // colDiaChi
             // 
             this.colDiaChi.DataPropertyName = "DIA_CHI";
             this.colDiaChi.HeaderText = "Địa chỉ";
             this.colDiaChi.Name = "colDiaChi";
-            this.colDiaChi.Width = 200;
             // 
             // colDienThoai
             // 
@@ -120,6 +121,7 @@
             this.bindingNavigatorAddNewItem,
             this.bindingNavigatorDeleteItem,
             this.toolLuu,
+            this.toolReload,
             this.toolThoat,
             this.toolStripSeparator1,
             this.toolTimKiem,
@@ -167,6 +169,7 @@
             // 
             this.bindingNavigatorPositionItem.AccessibleName = "Position";
             this.bindingNavigatorPositionItem.AutoSize = false;
+            this.bindingNavigatorPositionItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.bindingNavigatorPositionItem.Name = "bindingNavigatorPositionItem";
             this.bindingNavigatorPositionItem.Size = new System.Drawing.Size(50, 23);
             this.bindingNavigatorPositionItem.Text = "0";
@@ -204,7 +207,7 @@
             this.bindingNavigatorAddNewItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.bindingNavigatorAddNewItem.Name = "bindingNavigatorAddNewItem";
             this.bindingNavigatorAddNewItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorAddNewItem.Size = new System.Drawing.Size(42, 43);
+            this.bindingNavigatorAddNewItem.Size = new System.Drawing.Size(41, 43);
             this.bindingNavigatorAddNewItem.Text = "Thêm";
             this.bindingNavigatorAddNewItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.bindingNavigatorAddNewItem.Click += new System.EventHandler(this.bindingNavigatorAddNewItem_Click);
@@ -231,21 +234,21 @@
             this.toolLuu.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolLuu.Click += new System.EventHandler(this.toolLuu_Click);
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 46);
-            // 
             // toolThoat
             // 
             this.toolThoat.Image = global::CuahangNongduoc.Properties.Resources.stop;
             this.toolThoat.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolThoat.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolThoat.Name = "toolThoat";
-            this.toolThoat.Size = new System.Drawing.Size(45, 43);
+            this.toolThoat.Size = new System.Drawing.Size(44, 43);
             this.toolThoat.Text = " Thoát";
             this.toolThoat.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolThoat.Click += new System.EventHandler(this.toolThoat_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 46);
             // 
             // toolTimKiem
             // 
@@ -265,26 +268,38 @@
             this.toolTimHoTen.Checked = true;
             this.toolTimHoTen.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolTimHoTen.Name = "toolTimHoTen";
-            this.toolTimHoTen.Size = new System.Drawing.Size(152, 22);
+            this.toolTimHoTen.Size = new System.Drawing.Size(148, 22);
             this.toolTimHoTen.Text = "Nhà cung cấp";
             this.toolTimHoTen.Click += new System.EventHandler(this.toolTimHoTen_Click);
             // 
             // toolTimDiaChi
             // 
             this.toolTimDiaChi.Name = "toolTimDiaChi";
-            this.toolTimDiaChi.Size = new System.Drawing.Size(152, 22);
+            this.toolTimDiaChi.Size = new System.Drawing.Size(148, 22);
             this.toolTimDiaChi.Text = "Địa chỉ";
             this.toolTimDiaChi.Click += new System.EventHandler(this.toolTimDiaChi_Click);
             // 
             // toolTimNhaCungCap
             // 
+            this.toolTimNhaCungCap.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolTimNhaCungCap.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.toolTimNhaCungCap.Name = "toolTimNhaCungCap";
             this.toolTimNhaCungCap.Size = new System.Drawing.Size(150, 46);
             this.toolTimNhaCungCap.Text = "Tìm theo Nhà cung cấp";
-            this.toolTimNhaCungCap.Leave += new System.EventHandler(this.toolTimNhaCungCap_Leave);
             this.toolTimNhaCungCap.Enter += new System.EventHandler(this.toolTimNhaCungCap_Enter);
+            this.toolTimNhaCungCap.Leave += new System.EventHandler(this.toolTimNhaCungCap_Leave);
             this.toolTimNhaCungCap.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolTimNhaCungCap_KeyPress);
+            // 
+            // toolReload
+            // 
+            this.toolReload.Image = global::CuahangNongduoc.Properties.Resources.reload_24;
+            this.toolReload.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolReload.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolReload.Name = "toolReload";
+            this.toolReload.Size = new System.Drawing.Size(41, 43);
+            this.toolReload.Text = "Tải lại";
+            this.toolReload.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolReload.Click += new System.EventHandler(this.toolReload_Click);
             // 
             // frmNhaCungCap
             // 
@@ -332,5 +347,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolTimHoTen;
         private System.Windows.Forms.ToolStripMenuItem toolTimDiaChi;
         private System.Windows.Forms.ToolStripTextBox toolTimNhaCungCap;
+        private System.Windows.Forms.ToolStripButton toolReload;
     }
 }

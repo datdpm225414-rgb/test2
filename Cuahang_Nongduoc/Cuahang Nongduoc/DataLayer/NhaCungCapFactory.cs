@@ -13,7 +13,7 @@ namespace CuahangNongduoc.DataLayer
         public DataTable DanhsachNCC()
         {
             //OleDbCommand cmd = new OleDbCommand("SELECT * FROM NHA_CUNG_CAP");
-            SqlCommand cmd = new SqlCommand("SELECT ID, HO_TEN, DIA_CHI, DIEN_THOAI FROM NHA_CUNG_CAP");
+            SqlCommand cmd = new SqlCommand("SELECT ID, HO_TEN, DIA_CHI, DIEN_THOAI FROM NHA_CUNG_CAP WHERE Trang_Thai = 1");
             m_Ds.Load(cmd);
 
             return m_Ds;

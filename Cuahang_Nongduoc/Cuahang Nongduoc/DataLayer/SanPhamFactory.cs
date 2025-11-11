@@ -13,7 +13,7 @@ namespace CuahangNongduoc.DataLayer
         public DataTable DanhsachSanPham()
         {
             //OleDbCommand cmd = new OleDbCommand("SELECT * FROM SAN_PHAM");
-            SqlCommand cmd = new SqlCommand("SELECT * FROM SAN_PHAM WHERE TRANG_THAI = 1");
+            SqlCommand cmd = new SqlCommand("SELECT * FROM SAN_PHAM WHERE Trang_Thai = 1");
             m_Ds.Load(cmd);
 
             return m_Ds;
@@ -23,8 +23,7 @@ namespace CuahangNongduoc.DataLayer
         {
             //OleDbCommand cmd = new OleDbCommand("SELECT * FROM SAN_PHAM WHERE ID LIKE '%' + @id + '%'");
             //cmd.Parameters.Add("id", OleDbType.VarChar).Value = id;
-            SqlCommand cmd = new SqlCommand("SELECT ID, TEN_SAN_PHAM, SO_LUONG, DON_GIA_NHAP, GIA_BAN_SI, GIA_BAN_LE, ID_DON_VI_TINH " +
-                "FROM SAN_PHAM WHERE ID LIKE N'%' + @id + '%'");
+            SqlCommand cmd = new SqlCommand("SELECT * FROM SAN_PHAM WHERE ID LIKE N'%' + @id + '%' AND Trang_Thai = 1");
             cmd.Parameters.Add("id", SqlDbType.VarChar).Value = id;
             m_Ds.Load(cmd);
 
@@ -35,8 +34,7 @@ namespace CuahangNongduoc.DataLayer
             //OleDbCommand cmd = new OleDbCommand("SELECT * FROM SAN_PHAM WHERE TEN_SAN_PHAM LIKE '%' + @ten + '%'");
             //cmd.Parameters.Add("ten", OleDbType.VarChar).Value = ten;
             //m_Ds.Load(cmd);
-            SqlCommand cmd = new SqlCommand("SELECT ID, TEN_SAN_PHAM, SO_LUONG, DON_GIA_NHAP, GIA_BAN_SI, GIA_BAN_LE, ID_DON_VI_TINH " +
-                "FROM SAN_PHAM WHERE TEN_SAN_PHAM LIKE N'%' + @ten + '%'");
+            SqlCommand cmd = new SqlCommand("SELECT * FROM SAN_PHAM WHERE TEN_SAN_PHAM LIKE N'%' + @ten + '%'");
             cmd.Parameters.Add("ten", SqlDbType.VarChar).Value = ten;
             m_Ds.Load(cmd);
             return m_Ds;

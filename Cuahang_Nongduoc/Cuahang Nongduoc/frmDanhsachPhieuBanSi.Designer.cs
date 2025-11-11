@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDanhsachPhieuBanSi));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bindingNavigator = new System.Windows.Forms.BindingNavigator(this.components);
             this.bindingNavigatorCountItem = new System.Windows.Forms.ToolStripLabel();
             this.bindingNavigatorMoveFirstItem = new System.Windows.Forms.ToolStripButton();
@@ -332,9 +332,9 @@
             // PHI_DICH_VU
             // 
             this.PHI_DICH_VU.DataPropertyName = "PHI_DICH_VU";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N0";
-            this.PHI_DICH_VU.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N0";
+            this.PHI_DICH_VU.DefaultCellStyle = dataGridViewCellStyle1;
             this.PHI_DICH_VU.HeaderText = "Phí dịch vụ";
             this.PHI_DICH_VU.MinimumWidth = 6;
             this.PHI_DICH_VU.Name = "PHI_DICH_VU";
@@ -344,9 +344,9 @@
             // PHI_VAN_CHUYEN
             // 
             this.PHI_VAN_CHUYEN.DataPropertyName = "PHI_VAN_CHUYEN";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Format = "N0";
-            this.PHI_VAN_CHUYEN.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N0";
+            this.PHI_VAN_CHUYEN.DefaultCellStyle = dataGridViewCellStyle2;
             this.PHI_VAN_CHUYEN.HeaderText = "Phí vận chuyển";
             this.PHI_VAN_CHUYEN.MinimumWidth = 6;
             this.PHI_VAN_CHUYEN.Name = "PHI_VAN_CHUYEN";
@@ -356,9 +356,9 @@
             // GIAM_GIA
             // 
             this.GIAM_GIA.DataPropertyName = "GIAM_GIA";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle6.Format = "N0";
-            this.GIAM_GIA.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N0";
+            this.GIAM_GIA.DefaultCellStyle = dataGridViewCellStyle3;
             this.GIAM_GIA.HeaderText = "Giảm giá";
             this.GIAM_GIA.MinimumWidth = 6;
             this.GIAM_GIA.Name = "GIAM_GIA";
