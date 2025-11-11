@@ -62,7 +62,12 @@ namespace CuahangNongduoc.BusinessObject
             set { m_DonViTinh = value; }
         }
 
-	
-	
+        private Decimal m_GiaBinhQuan;
+        public Decimal GiaBinhQuan
+        {
+            get { return m_GiaBinhQuan; }
+            set { m_GiaBinhQuan = value; }
+        }
+
     }
 }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using CuahangNongduoc.BusinessObject;
+using CuahangNongduoc.Controller;
+using CuahangNongduoc.Strategy;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,6 +14,7 @@ namespace CuahangNongduoc
     public partial class frmNhaCungCap : Form
     {
         CuahangNongduoc.Controller.NhaCungCapController ctrl = new CuahangNongduoc.Controller.NhaCungCapController();
+        NhaCungCapController ctrlNCC = new NhaCungCapController();
         public frmNhaCungCap()
         {
             InitializeComponent();
@@ -28,30 +32,77 @@ namespace CuahangNongduoc
         {
             if (MessageBox.Show("Bạn có chắc chắn xóa không?", "Nha Cung Cap", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                bindingNavigator.BindingSource.RemoveCurrent();
+                if (dataGridView.SelectedRows.Count > 0)
+                {
+                    try
+                    {
+
+                        var policy = new XoaMem();
+
+                        DataGridViewRow row = dataGridView.SelectedRows[0];
+                        string id = row.Cells["colID"].Value.ToString();
+                        ThamSo.Delete(id, "Nha_Cung_cap", policy);
+
+                        MessageBox.Show("Xóa thành công!", "Nha cung cap ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        frmNhaCungCap_Load(sender, e);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Xóa thất bại!");
+                    }
+
+
+
+                }
+                //bindingNavigator.BindingSource.RemoveCurrent();
             }
+        }
+        void Allow(bool allow) // Thêm mới hàm này 
+        {
+            dataGridView.Enabled = allow;
+            bindingNavigatorDeleteItem.Enabled = allow;
+            toolLuu.Enabled = !allow;
+            bindingNavigatorAddNewItem.Enabled = allow;
         }
 
         private void frmNhaCungCap_Load(object sender, EventArgs e)
         {
             dataGridView.AutoGenerateColumns = false;
             ctrl.HienthiDataGridview(dataGridView, bindingNavigator);
+            Allow(true);
         }
-
+        long masoTemp;
         private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
+            Allow(false);
             long maso = ThamSo.NhaCungCap;
-            ThamSo.NhaCungCap = maso + 1;
+            masoTemp = maso;
 
             DataRowView row = (DataRowView)bindingNavigator.BindingSource.AddNew();
             row["ID"] = maso;
             
         }
 
+        //Co sua
         private void toolLuu_Click(object sender, EventArgs e)
         {
-            bindingNavigatorPositionItem.Focus();
-            ctrl.Save();
+            ThamSo.NhaCungCap = masoTemp + 1;
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                if (row.IsNewRow) continue;
+                if (row.Cells["colHoTen"].Value == null || row.Cells["colHoTen"].Value.ToString().Trim() == "")
+                {
+                    MessageBox.Show("Họ tê nhà cung cấp không được để trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    bindingNavigatorPositionItem.Focus();
+                    return;
+                }
+                else
+                {
+
+                    bindingNavigatorPositionItem.Focus();
+                    ctrl.Save();
+                }
+            }
         }
 
         private void toolThoat_Click(object sender, EventArgs e)
@@ -104,6 +155,11 @@ namespace CuahangNongduoc
             toolTimDiaChi.Checked = !toolTimHoTen.Checked;
             toolTimNhaCungCap.Text = "Tìm theo Địa chỉ";
             bindingNavigator.Focus();
+        }
+
+        private void toolReload_Click(object sender, EventArgs e)
+        {
+            frmNhaCungCap_Load(sender, e);
         }
     }
 }

@@ -540,6 +540,8 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="strategy\Xoa.cs" />
+    <Compile Include="strategy\XoaMem.cs" />
     <Compile Include="ThamSo.cs" />
   </ItemGroup>
   <ItemGroup>

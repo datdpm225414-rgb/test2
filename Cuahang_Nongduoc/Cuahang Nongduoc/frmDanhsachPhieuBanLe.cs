@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using CuahangNongduoc.BusinessObject;
 using CuahangNongduoc.Controller;
+using CuahangNongduoc.Strategy;
 
 namespace CuahangNongduoc
 {
@@ -90,9 +91,10 @@ namespace CuahangNongduoc
                     //Xoá phiếu bán ( cập nhật trạng thái)
                     if (dataGridView.SelectedRows.Count > 0)
                     {
+                        var policy = new XoaMem();
                         DataGridViewRow row = dataGridView.SelectedRows[0];
                         string id = row.Cells["colId"].Value.ToString();
-                        if (ThamSo.Delete(id, "PHIEU_BAN"))
+                        if (ThamSo.Delete(id, "PHIEU_BAN", policy))
                         {
                             MessageBox.Show("Xóa thành công!", "Phieu Ban Le", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             frmDanhsachPhieuNhap_Load(sender, e);

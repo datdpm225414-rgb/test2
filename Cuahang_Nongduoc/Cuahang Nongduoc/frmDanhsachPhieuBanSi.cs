@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using CuahangNongduoc.BusinessObject;
 using CuahangNongduoc.Controller;
+using CuahangNongduoc.Strategy;
 
 namespace CuahangNongduoc
 {
@@ -16,11 +17,13 @@ namespace CuahangNongduoc
         {
             InitializeComponent();
         }
-
+        
         PhieuBanController ctrl = new PhieuBanController();
         KhachHangController ctrlKH = new KhachHangController();
         DichVuController ctrlDV = new DichVuController();
-        NguoiDungController ctrND = new NguoiDungController();
+        NguoiDungController ctrND = new NguoiDungController(); //Them
+        //Co sua
+
         private void frmDanhsachPhieuNhap_Load(object sender, EventArgs e)
         {
             dataGridView.AutoGenerateColumns = false;
@@ -71,6 +74,7 @@ namespace CuahangNongduoc
                 ctrl.Save();
             }
         }
+        //Co sua
 
         private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
         {
@@ -90,9 +94,11 @@ namespace CuahangNongduoc
                     //Xoá phiếu bán ( cập nhật trạng thái)
                     if (dataGridView.SelectedRows.Count > 0)
                     {
+                        var policy = new XoaMem();
+
                         DataGridViewRow row = dataGridView.SelectedRows[0];
                         string id = row.Cells["colid"].Value.ToString();
-                        if (ThamSo.Delete(id, "PHIEU_BAN"))
+                        if (ThamSo.Delete(id, "PHIEU_BAN",policy))
                         {
                             MessageBox.Show("Xóa thành công!", "Phieu Ban Le", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             frmDanhsachPhieuNhap_Load(sender, e);
@@ -134,5 +140,7 @@ namespace CuahangNongduoc
                 ctrl.TimPhieuBan(Tim.cmbNCC.SelectedValue.ToString(), Tim.dtNgayNhap.Value.Date);
             }
         }
+
+
     }
 }

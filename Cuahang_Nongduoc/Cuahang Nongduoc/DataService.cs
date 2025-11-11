@@ -15,7 +15,7 @@ namespace CuahangNongduoc
         private static SqlConnection m_Connection;
 
         //public static String m_ConnectString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=cuahang.dll;";
-        public static String m_ConnectString = @"Server=.\SQLEXPRESS; Database = CHNONGDUOC2; Integrated Security = True; MultipleActiveResultSets = True; TrustServerCertificate = True";
+        public static String m_ConnectString = @"Server=.\SQLEXPRESS; Database = CHNONGDUOC; Integrated Security = True; MultipleActiveResultSets = True; TrustServerCertificate = True";
 
         //public static String m_ConnectString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\\Users\\Admin Pc\\Downloads\\New folder\\do an\\Cuahang_Nongduoc\\Cuahang Nongduoc\\bin\\Debug/cuahang.dll;";
         // The command to execute query or non-query command on a database of this data service.

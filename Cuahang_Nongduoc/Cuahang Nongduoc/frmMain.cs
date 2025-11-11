@@ -498,5 +498,18 @@ namespace CuahangNongduoc
             else
                 frmInPhieuBanGiamGia.Activate();
         }
+        frmDoanhThu frmDoanhThu = null;
+        private void toolDoanhThu_Click(object sender, EventArgs e)
+        {
+
+            if (frmDoanhThu == null || frmDoanhThu.IsDisposed)
+            {
+                frmDoanhThu = new frmDoanhThu();
+                frmDoanhThu.MdiParent = this;
+                frmDoanhThu.Show();
+            }
+            else
+                frmDoanhThu.Activate();
+        }
     }
 }
